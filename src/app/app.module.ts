@@ -44,10 +44,16 @@ import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
+import { RatingModule } from 'primeng/rating';
 
 // Imports de Utilidades
 import { ObjectModelInitializer } from 'src/app/shared/ObjectModelInitializer';
 import { TextProperties } from 'src/app/shared/TextProperties';
+
+// Imports de Sevices
+
+import { ProductService } from 'src/app/services/productService';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -62,6 +68,7 @@ import { TextProperties } from 'src/app/shared/TextProperties';
     MdlModule,
     NgSelectModule,
     FormsModule,
+    HttpClientModule,
 
     ButtonModule,
     ProgressSpinnerModule,
@@ -97,9 +104,10 @@ import { TextProperties } from 'src/app/shared/TextProperties';
     AccordionModule,
     CheckboxModule,
     FieldsetModule,
-    ChipsModule
+    ChipsModule,
+    RatingModule
   ],
-  providers: [ObjectModelInitializer, TextProperties],
+  providers: [ObjectModelInitializer, TextProperties, ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
