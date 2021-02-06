@@ -1,15 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SelectItem, MessageService } from 'primeng/api';
-import { Equipo } from 'src/app/models/equipoModel';
+import { Producto } from 'src/app/models/equipoModel';
 import { ObjectModelInitializer } from 'src/app/shared/ObjectModelInitializer';
 import { TextProperties } from 'src/app/shared/TextProperties';
+import { ProductService } from 'src/app/services/productService';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-disponibilidad-query',
   templateUrl: './disponibilidad-query.component.html',
   styleUrls: ['./disponibilidad.component.css'],
-  providers: [ MessageService ]
+  providers: [ MessageService, ProductService ]
 })
 export class DisponibilidadQueryComponent implements OnInit {
 
@@ -20,7 +22,7 @@ export class DisponibilidadQueryComponent implements OnInit {
   fadeIn: any;
 
   // Objetos datos
-  listaMateriales: Equipo[];
+  listaProductos: Producto[];
   sortOptionsEqu: SelectItem[];
   sortKey: string;
   sortFieldEqu: string;
@@ -40,7 +42,7 @@ export class DisponibilidadQueryComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute,
     textProperties: TextProperties, objectModelInitializer: ObjectModelInitializer,
-    private messageService: MessageService) {
+    private messageService: MessageService, private productService: ProductService, private primengConfig: PrimeNGConfig) {
       
     // Objetos inmutables
     this.textProperties = textProperties;
@@ -57,6 +59,15 @@ export class DisponibilidadQueryComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerParametrizaciones();
+
+    this.productService.getProducts().then(data => this.listaProductos = data);
+
+        this.sortOptionsEqu = [
+            {label: 'Price High to Low', value: '!price'},
+            {label: 'Price Low to High', value: 'price'}
+        ];
+
+        this.primengConfig.ripple = true;
   }
 
   obtenerParametrizaciones() {
@@ -101,7 +112,7 @@ export class DisponibilidadQueryComponent implements OnInit {
     
   }
 
-  mostrarDetallesEdit(equipo: Equipo) {
+  mostrarDetallesEdit(equipo: Producto) {
     try {
       //this.disponibilidadService.equipoSeleccionado = equipo;
       this.displayModalEdit = true;
@@ -111,7 +122,7 @@ export class DisponibilidadQueryComponent implements OnInit {
     }
   }
 
-  redirectToDisponibilidadEdit(equipo: Equipo) {
+  redirectToDisponibilidadEdit(equipo: Producto) {
     try {
       //this.disponibilidadService.equipoSeleccionado = equipo;
       this.router.navigate(['disponibilidad-edit']);
@@ -121,7 +132,7 @@ export class DisponibilidadQueryComponent implements OnInit {
     }
   }
 
-  obtenerColorEquipo(equipo: Equipo) {
+  obtenerColorEquipo(equipo: Producto) {
     //return this.util.obtenerColorEquipo(equipo);
   }
 
