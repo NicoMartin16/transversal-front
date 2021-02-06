@@ -48,12 +48,14 @@ import { ChipsModule } from 'primeng/chips';
 // Imports de Utilidades
 import { ObjectModelInitializer } from 'src/app/shared/ObjectModelInitializer';
 import { TextProperties } from 'src/app/shared/TextProperties';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RoutingComponents
+    RoutingComponents,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

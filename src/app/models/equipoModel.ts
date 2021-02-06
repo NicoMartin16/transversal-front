@@ -1,5 +1,5 @@
 export interface Equipo {
-    id;
+    id: number;
     cantidad;
     color;
     descripcion;
