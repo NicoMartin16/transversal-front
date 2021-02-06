@@ -12,4 +12,7 @@ export class DisponibilidadEditComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  handleClick(event) {
+    console.log(event);
+  }
 }
