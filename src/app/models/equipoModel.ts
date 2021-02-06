@@ -1,12 +1,12 @@
-export interface Equipo {
-    id: number;
-    cantidad;
-    color;
-    descripcion;
-    lstCaracteristicas;
-    marca;
-    nombre;
-    tipo;
-    tipoEquipoTecnologia;
-    valor;
+export class Producto {
+    id?:string;
+    code?:string;
+    name?:string;
+    description?:string;
+    price?:number;
+    quantity?:number;
+    inventoryStatus?:string;
+    category?:string;
+    image?:string;
+    rating?:number;
 }
