@@ -6,15 +6,16 @@ import { ObjectModelInitializer } from 'src/app/shared/ObjectModelInitializer';
 import { TextProperties } from 'src/app/shared/TextProperties';
 import { ProductService } from 'src/app/services/productService';
 import { PrimeNGConfig } from 'primeng/api';
+import { ProductSize } from '../../models/productSize.model';
+import { ProductSizeService } from '../../services/product-size.service';
 
 @Component({
   selector: 'app-disponibilidad-query',
   templateUrl: './disponibilidad-query.component.html',
   styleUrls: ['./disponibilidad.component.css'],
-  providers: [ MessageService, ProductService ]
+  providers: [MessageService, ProductService],
 })
 export class DisponibilidadQueryComponent implements OnInit {
-
   @ViewChild('sc') sc;
 
   // Objetos de Animaciones
@@ -23,6 +24,7 @@ export class DisponibilidadQueryComponent implements OnInit {
 
   // Objetos datos
   listaProductos: Producto[];
+  listaTamanos: ProductSize[];
   sortOptionsEqu: SelectItem[];
   sortKey: string;
   sortFieldEqu: string;
@@ -40,17 +42,23 @@ export class DisponibilidadQueryComponent implements OnInit {
 
   varPruebaStr: String = 'huawei';
 
-  constructor(private router: Router, private route: ActivatedRoute,
-    textProperties: TextProperties, objectModelInitializer: ObjectModelInitializer,
-    private messageService: MessageService, private productService: ProductService, private primengConfig: PrimeNGConfig) {
-      
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    textProperties: TextProperties,
+    objectModelInitializer: ObjectModelInitializer,
+    private messageService: MessageService,
+    private productService: ProductService,
+    private primengConfig: PrimeNGConfig,
+    private ProductSizeService: ProductSizeService
+  ) {
     // Objetos inmutables
     this.textProperties = textProperties;
     this.objectModelInitializer = objectModelInitializer;
     this.const = objectModelInitializer.getConst();
 
     // Objetos mutables
-    this.msg = textProperties.getProperties(this.const.idiomaEs)
+    this.msg = textProperties.getProperties(this.const.idiomaEs);
 
     // Objetos datos
     this.selectedBrands = [];
@@ -58,20 +66,34 @@ export class DisponibilidadQueryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.getProductSize();
     this.obtenerParametrizaciones();
 
-    this.productService.getProducts().then(data => this.listaProductos = data);
+    this.productService.getProduct().subscribe(
+      (data) => {
+        this.listaProductos = data;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
-        this.sortOptionsEqu = [
-            {label: 'Price High to Low', value: '!price'},
-            {label: 'Price Low to High', value: 'price'}
-        ];
+    this.sortOptionsEqu = [
+      { label: 'Price High to Low', value: '!price' },
+      { label: 'Price Low to High', value: 'price' },
+    ];
 
-        this.primengConfig.ripple = true;
+    this.primengConfig.ripple = true;
   }
 
-  obtenerParametrizaciones() {
-    
+  obtenerParametrizaciones() {}
+
+  getProductSize() {
+    this.ProductSizeService.getProductSize().subscribe((res) => {
+      this.listaTamanos = res;
+      console.log(this.listaTamanos);
+    })
   }
 
   inicializar() {
@@ -81,36 +103,48 @@ export class DisponibilidadQueryComponent implements OnInit {
     }*/
 
     this.sortOptionsEqu = [
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_ascendente, value: 'precioNormal' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_descendente, value: '!precioNormal' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_marca, value: 'marca.label' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_tipo, value: 'tipo.label' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_nombre, value: 'nombre' }
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_ascendente,
+        value: 'precioNormal',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_descendente,
+        value: '!precioNormal',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_marca,
+        value: 'marca.label',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_tipo,
+        value: 'tipo.label',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_nombre,
+        value: 'nombre',
+      },
     ];
 
     this.cargarCatalogo();
   }
 
   formatearValorMoneda(valor) {
-    return '$' + new Intl.NumberFormat().format(parseFloat(valor.amount))
+    return '$' + new Intl.NumberFormat().format(parseFloat(valor.amount));
   }
 
   onSortChangeEqu(event) {
     let value = event.value;
 
     if (value.indexOf('!') === 0) {
-      this.sortOrderEqu = "-1";
+      this.sortOrderEqu = '-1';
       this.sortFieldEqu = value.substring(1, value.length);
-    }
-    else {
-      this.sortOrderEqu = "1";
+    } else {
+      this.sortOrderEqu = '1';
       this.sortFieldEqu = value;
     }
   }
 
-  cargarCatalogo() {
-    
-  }
+  cargarCatalogo() {}
 
   mostrarDetallesEdit(equipo: Producto) {
     try {

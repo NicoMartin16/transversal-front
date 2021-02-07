@@ -24,27 +24,9 @@
                                                             <p-accordionTab header="Tamaño">
                                                                 Filtro Tamaño
                                                                 <div class="mdl-grid">
-                                                                    <div class="mdl-cell mdl-cell--12-col">
-                                                                        <p-checkbox name="groupBrand" value="Alcatel"
-                                                                            label="Alcatel" [(ngModel)]="selectedBrands"
-                                                                            inputId="alcatel"></p-checkbox>
-                                                                    </div>
-                                                                    <div class="mdl-cell mdl-cell--12-col">
-                                                                        <p-checkbox name="groupBrand" value="Huawei"
-                                                                            label="Huawei" [(ngModel)]="selectedBrands"
-                                                                            inputId="huawei">
-                                                                        </p-checkbox>
-                                                                    </div>
-                                                                    <div class="mdl-cell mdl-cell--12-col">
-                                                                        <p-checkbox name="groupBrand" value="Motorola"
-                                                                            label="Motorola"
-                                                                            [(ngModel)]="selectedBrands"
-                                                                            inputId="motorola"></p-checkbox>
-                                                                    </div>
-                                                                    <div class="mdl-cell mdl-cell--12-col">
-                                                                        <p-checkbox name="groupBrand" value="Samsung"
-                                                                            label="Samsung" [(ngModel)]="selectedBrands"
-                                                                            inputId="samsung"></p-checkbox>
+                                                                    <div class="mdl-cell mdl-cell--12-col" *ngFor="let tamano of listaTamanos">
+                                                                      <p-checkbox name="group2" value="tamano" [value]="tamano" [inputId]="tamano.productSizeId"></p-checkbox>
+                                                                      <label [for]="tamano.productSizeId">{{tamano.size}}</label>
                                                                     </div>
                                                                 </div>
                                                             </p-accordionTab>
@@ -93,21 +75,14 @@
                                                     <div class="p-col-12">
                                                         <div class="product-list-item">
                                                             <div class="product-list-detail">
-                                                                <div class="product-name">{{product.name}}</div>
-                                                                <div class="product-description">{{product.description}}
+                                                                <div class="product-name">{{product.productName}}</div>
+                                                                <div class="product-description">{{product.productDescription}}
                                                                 </div>
-                                                                <p-rating [ngModel]="product.rating" [readonly]="true"
-                                                                    [cancel]="false"></p-rating>
                                                                 <i class="pi pi-tag product-category-icon"></i><span
-                                                                    class="product-category">{{product.category}}</span>
+                                                                    class="product-category">{{product.category.categoryName}}</span>
                                                             </div>
                                                             <div class="product-list-action">
-                                                                <span class="product-price">${{product.price}}</span>
-                                                                <p-button icon="pi pi-shopping-cart" label="Add to Cart"
-                                                                    [disabled]="product.inventoryStatus === 'OUTOFSTOCK'">
-                                                                </p-button>
-                                                                <span
-                                                                    [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span>
+                                                                <span class="product-price">${{product.unitPrice}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -119,23 +94,16 @@
                                                                 <div>
                                                                     <i class="pi pi-tag product-category-icon"></i>
                                                                     <span
-                                                                        class="product-category">{{product.category}}</span>
+                                                                        class="product-category">{{product.category.categoryName}}</span>
                                                                 </div>
-                                                                <span
-                                                                    [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span>
                                                             </div>
                                                             <div class="product-grid-item-content">
-                                                                <div class="product-name">{{product.name}}</div>
-                                                                <div class="product-description">{{product.description}}
+                                                                <div class="product-name">{{product.productName}}</div>
+                                                                <div class="product-description">{{product.productDescription}}
                                                                 </div>
-                                                                <p-rating [ngModel]="product.rating" [readonly]="true"
-                                                                    [cancel]="false"></p-rating>
                                                             </div>
                                                             <div class="product-grid-item-bottom">
-                                                                <span class="product-price">${{product.price}}</span>
-                                                                <p-button icon="pi pi-shopping-cart"
-                                                                    [disabled]="product.inventoryStatus === 'OUTOFSTOCK'">
-                                                                </p-button>
+                                                                <span class="product-price">${{product.unitPrice}}</span>
                                                             </div>
                                                         </div>
                                                     </div>

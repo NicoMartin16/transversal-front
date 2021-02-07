@@ -1,12 +1,14 @@
-export class Producto {
-    id?:string;
-    code?:string;
-    name?:string;
-    description?:string;
-    price?:number;
-    quantity?:number;
-    inventoryStatus?:string;
-    category?:string;
-    image?:string;
-    rating?:number;
+import { Supplier } from './supplier.model';
+import { Category } from './category.model';
+export interface Producto {
+    productId?:number;
+    supplier: Supplier;
+    category: Category;
+    sku: string;
+    productName: string;
+    productDescription: string;
+    quantityPerUnit: number;
+    unitPrice: number;
+    discount: number;
+    unitWeight: number;
 }
