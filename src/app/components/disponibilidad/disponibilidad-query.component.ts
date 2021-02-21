@@ -51,7 +51,9 @@ export class DisponibilidadQueryComponent implements OnInit {
     private productService: ProductService,
     private primengConfig: PrimeNGConfig,
     private ProductSizeService: ProductSizeService
-  ) {
+  ) 
+  
+  {
     // Objetos inmutables
     this.textProperties = textProperties;
     this.objectModelInitializer = objectModelInitializer;
@@ -87,7 +89,7 @@ export class DisponibilidadQueryComponent implements OnInit {
     this.primengConfig.ripple = true;
   }
 
-  obtenerParametrizaciones() {}
+  obtenerParametrizaciones() { }
 
   getProductSize() {
     this.ProductSizeService.getProductSize().subscribe((res) => {
@@ -144,7 +146,7 @@ export class DisponibilidadQueryComponent implements OnInit {
     }
   }
 
-  cargarCatalogo() {}
+  cargarCatalogo() { }
 
   mostrarDetallesEdit(equipo: Producto) {
     try {
@@ -172,5 +174,40 @@ export class DisponibilidadQueryComponent implements OnInit {
 
   handleClick(event) {
     console.log(event);
+  }
+
+  getImage(product: Producto) {
+    let pictureResponse: any;
+    let base64Data: any;
+    let retrieveImage: any;
+
+    try {
+      if (product !== null && product.picture !== null) {
+        console.log(product);
+        
+        pictureResponse = product.picture;
+        console.log("prueba " + pictureResponse);
+
+        base64Data = this.base64ToArray(pictureResponse);
+        console.log(base64Data);
+
+        retrieveImage = 'data:image/jpeg;base64,' + pictureResponse;
+        console.log(retrieveImage);
+        return retrieveImage;
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  base64ToArray(base64: string): Uint8Array {
+    const binaryString = window.atob(base64 ?? '');
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
   }
 }

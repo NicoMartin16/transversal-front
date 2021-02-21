@@ -11,4 +11,5 @@ export interface Producto {
     unitPrice: number;
     discount: number;
     unitWeight: number;
+    picture: any;
 }
