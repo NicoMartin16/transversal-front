@@ -5,7 +5,7 @@ import { DisponibilidadQueryComponent} from './components/disponibilidad/disponi
 
 const routes: Routes = [
   { path: 'disponibilidad-query', component: DisponibilidadQueryComponent },
-  { path: 'disponibilidad-edit', component: DisponibilidadEditComponent }
+  { path: 'disponibilidad-edit/:id', component: DisponibilidadEditComponent }
 ];
 
 @NgModule({

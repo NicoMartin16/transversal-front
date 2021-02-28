@@ -1,9 +1,9 @@
 <div class="demo-container demo-layout-transparent">
 
-  <mdl-layout>
-    <mdl-layout-content>
-      <!-- Notificaciones -->
-      <p-toast></p-toast>
+    <mdl-layout>
+        <mdl-layout-content>
+            <!-- Notificaciones -->
+            <p-toast></p-toast>
 
             <p-scrollPanel #sc [style]="{width: '100%', height: '100vh'}" styleClass="custom">
                 <!-- Aquí creamos nuestro contenido para las diferentes páginas -->
@@ -24,9 +24,14 @@
                                                             <p-accordionTab header="Tamaño">
                                                                 Filtro Tamaño
                                                                 <div class="mdl-grid">
-                                                                    <div class="mdl-cell mdl-cell--12-col" *ngFor="let tamano of listaTamanos">
-                                                                      <p-checkbox name="group2" value="tamano" [value]="tamano" [inputId]="tamano.productSizeId"></p-checkbox>
-                                                                      <label [for]="tamano.productSizeId">{{tamano.size}}</label>
+                                                                    <div class="mdl-cell mdl-cell--12-col"
+                                                                        *ngFor="let tamano of listaTamanos">
+                                                                        <p-checkbox name="group2" value="tamano"
+                                                                            [value]="tamano"
+                                                                            [inputId]="tamano.productSizeId">
+                                                                        </p-checkbox>
+                                                                        <label
+                                                                            [for]="tamano.productSizeId">{{tamano.size}}</label>
                                                                     </div>
                                                                 </div>
                                                             </p-accordionTab>
@@ -76,20 +81,22 @@
                                                         <div class="product-list-item">
                                                             <div class="product-list-detail">
                                                                 <div class="product-name">{{product.productName}}</div>
-                                                                <div class="product-description">{{product.productDescription}}
+                                                                <div class="product-description">
+                                                                    {{product.productDescription}}
                                                                 </div>
                                                                 <i class="pi pi-tag product-category-icon"></i><span
                                                                     class="product-category">{{product.category.categoryName}}</span>
                                                             </div>
                                                             <div class="product-list-action">
-                                                                <span class="product-price">${{product.unitPrice}}</span>
+                                                                <span
+                                                                    class="product-price">${{product.unitPrice}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </ng-template>
                                                 <ng-template let-product pTemplate="gridItem">
                                                     <div class="p-col-12 p-md-4">
-                                                        <div class="product-grid-item card">
+                                                        <div class="product-grid-item card" style="cursor: pointer;" [routerLink]="['/disponibilidad-edit/', product.productId]">
                                                             <div class="product-grid-item-top">
                                                                 <div>
                                                                     <i class="pi pi-tag product-category-icon"></i>
@@ -97,15 +104,16 @@
                                                                         class="product-category">{{product.category.categoryName}}</span>
                                                                 </div>
                                                             </div>
-                                                            <img [src]="getImage(product)"/>
-                                                            <img src="./assets/images/27002.jpg"/>
+                                                            <img [src]="getImage(product)" />
                                                             <div class="product-grid-item-content">
                                                                 <div class="product-name">{{product.productName}}</div>
-                                                                <div class="product-description">{{product.productDescription}}
+                                                                <div class="product-description">
+                                                                    {{product.productDescription}}
                                                                 </div>
                                                             </div>
                                                             <div class="product-grid-item-bottom">
-                                                                <span class="product-price">${{product.unitPrice}}</span>
+                                                                <span
+                                                                    class="product-price">${{product.unitPrice}}</span>
                                                             </div>
                                                         </div>
                                                     </div>
