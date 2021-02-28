@@ -1,18 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SelectItem, MessageService } from 'primeng/api';
-import { Equipo } from 'src/app/models/equipoModel';
+import { Producto } from 'src/app/models/equipoModel';
 import { ObjectModelInitializer } from 'src/app/shared/ObjectModelInitializer';
 import { TextProperties } from 'src/app/shared/TextProperties';
+import { ProductService } from 'src/app/services/productService';
+import { PrimeNGConfig } from 'primeng/api';
+import { ProductSize } from '../../models/productSize.model';
+import { ProductSizeService } from '../../services/product-size.service';
 
 @Component({
   selector: 'app-disponibilidad-query',
   templateUrl: './disponibilidad-query.component.html',
   styleUrls: ['./disponibilidad.component.css'],
-  providers: [ MessageService ]
+  providers: [MessageService, ProductService],
 })
 export class DisponibilidadQueryComponent implements OnInit {
-
   @ViewChild('sc') sc;
 
   // Objetos de Animaciones
@@ -20,7 +23,8 @@ export class DisponibilidadQueryComponent implements OnInit {
   fadeIn: any;
 
   // Objetos datos
-  listaMateriales: Equipo[];
+  listaProductos: Producto[];
+  listaTamanos: ProductSize[];
   sortOptionsEqu: SelectItem[];
   sortKey: string;
   sortFieldEqu: string;
@@ -38,17 +42,25 @@ export class DisponibilidadQueryComponent implements OnInit {
 
   varPruebaStr: String = 'huawei';
 
-  constructor(private router: Router, private route: ActivatedRoute,
-    textProperties: TextProperties, objectModelInitializer: ObjectModelInitializer,
-    private messageService: MessageService) {
-      
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    textProperties: TextProperties,
+    objectModelInitializer: ObjectModelInitializer,
+    private messageService: MessageService,
+    private productService: ProductService,
+    private primengConfig: PrimeNGConfig,
+    private ProductSizeService: ProductSizeService
+  ) 
+  
+  {
     // Objetos inmutables
     this.textProperties = textProperties;
     this.objectModelInitializer = objectModelInitializer;
     this.const = objectModelInitializer.getConst();
 
     // Objetos mutables
-    this.msg = textProperties.getProperties(this.const.idiomaEs)
+    this.msg = textProperties.getProperties(this.const.idiomaEs);
 
     // Objetos datos
     this.selectedBrands = [];
@@ -56,11 +68,34 @@ export class DisponibilidadQueryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.getProductSize();
     this.obtenerParametrizaciones();
+
+    this.productService.getProduct().subscribe(
+      (data) => {
+        this.listaProductos = data;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    this.sortOptionsEqu = [
+      { label: 'Price High to Low', value: '!price' },
+      { label: 'Price Low to High', value: 'price' },
+    ];
+
+    this.primengConfig.ripple = true;
   }
 
-  obtenerParametrizaciones() {
-    
+  obtenerParametrizaciones() { }
+
+  getProductSize() {
+    this.ProductSizeService.getProductSize().subscribe((res) => {
+      this.listaTamanos = res;
+      console.log(this.listaTamanos);
+    })
   }
 
   inicializar() {
@@ -70,38 +105,50 @@ export class DisponibilidadQueryComponent implements OnInit {
     }*/
 
     this.sortOptionsEqu = [
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_ascendente, value: 'precioNormal' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_descendente, value: '!precioNormal' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_marca, value: 'marca.label' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_tipo, value: 'tipo.label' },
-      { label: this.msg.lbl_mtto_disponibilidad_ordernar_nombre, value: 'nombre' }
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_ascendente,
+        value: 'precioNormal',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_descendente,
+        value: '!precioNormal',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_marca,
+        value: 'marca.label',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_tipo,
+        value: 'tipo.label',
+      },
+      {
+        label: this.msg.lbl_mtto_disponibilidad_ordernar_nombre,
+        value: 'nombre',
+      },
     ];
 
     this.cargarCatalogo();
   }
 
   formatearValorMoneda(valor) {
-    return '$' + new Intl.NumberFormat().format(parseFloat(valor.amount))
+    return '$' + new Intl.NumberFormat().format(parseFloat(valor.amount));
   }
 
   onSortChangeEqu(event) {
     let value = event.value;
 
     if (value.indexOf('!') === 0) {
-      this.sortOrderEqu = "-1";
+      this.sortOrderEqu = '-1';
       this.sortFieldEqu = value.substring(1, value.length);
-    }
-    else {
-      this.sortOrderEqu = "1";
+    } else {
+      this.sortOrderEqu = '1';
       this.sortFieldEqu = value;
     }
   }
 
-  cargarCatalogo() {
-    
-  }
+  cargarCatalogo() { }
 
-  mostrarDetallesEdit(equipo: Equipo) {
+  mostrarDetallesEdit(equipo: Producto) {
     try {
       //this.disponibilidadService.equipoSeleccionado = equipo;
       this.displayModalEdit = true;
@@ -111,7 +158,7 @@ export class DisponibilidadQueryComponent implements OnInit {
     }
   }
 
-  redirectToDisponibilidadEdit(equipo: Equipo) {
+  redirectToDisponibilidadEdit(equipo: Producto) {
     try {
       //this.disponibilidadService.equipoSeleccionado = equipo;
       this.router.navigate(['disponibilidad-edit']);
@@ -121,11 +168,46 @@ export class DisponibilidadQueryComponent implements OnInit {
     }
   }
 
-  obtenerColorEquipo(equipo: Equipo) {
+  obtenerColorEquipo(equipo: Producto) {
     //return this.util.obtenerColorEquipo(equipo);
   }
 
   handleClick(event) {
     console.log(event);
+  }
+
+  getImage(product: Producto) {
+    let pictureResponse: any;
+    let base64Data: any;
+    let retrieveImage: any;
+
+    try {
+      if (product !== null && product.picture !== null) {
+        console.log(product);
+        
+        pictureResponse = product.picture;
+        console.log("prueba " + pictureResponse);
+
+        base64Data = this.base64ToArray(pictureResponse);
+        console.log(base64Data);
+
+        retrieveImage = 'data:image/jpeg;base64,' + pictureResponse;
+        console.log(retrieveImage);
+        return retrieveImage;
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  base64ToArray(base64: string): Uint8Array {
+    const binaryString = window.atob(base64 ?? '');
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
   }
 }
